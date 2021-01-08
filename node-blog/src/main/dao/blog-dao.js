@@ -3,35 +3,37 @@
  * @author  Ta_Mu
  * @date  2020/12/11 10:24
  */
-const {exec} = require('../db/mysql')
+const {exec, escape} = require('../db/mysql')
 const dayjs = require('dayjs')
 const CommonUtil = require('../util/common-util')
+const xss = require('xss')
 
 const getList = (author, keyword) => {
   let sql = 'select * from blog where 1 = 1'
   if(author) {
-    sql += ` and author = '${author}'`
+    sql += ` and author = ${escape(author)}`
   }
   if(keyword) {
-    sql += ` and title like '%${keyword}%'`
+    sql += ` and title like '%${escape(keyword)}%'`
   }
   return exec(sql)
 }
 
 const getById = async (id) => {
-  const sql = `select * from blog where id = '${id}'`
+  const sql = `select * from blog where id = ${escape(id)}`
   const result = await exec(sql)
   return result && result[0]
 }
 
 const create = async (blogData) => {
   const currentTime = getCurrentTime()
-  const sql = `insert into blog (title, content, author, createTime, updateTime) values ('${blogData.title}',
-   '${CommonUtil.toLiteral(blogData.content)}', 
-   '${blogData.author}', 
-   '${currentTime}', 
-   '${currentTime}'
+  const sql = `insert into blog (title, content, author, createTime, updateTime) values (
+  ${escape(xss(CommonUtil.toLiteral(blogData.title)))}, 
+  ${escape(xss(CommonUtil.toLiteral(blogData.content)))}, 
+  ${escape(blogData.author)},${escape(currentTime)},
+  ${escape(currentTime)}
    )`
+  console.log(sql)
   const result = await exec(sql)
   return {
     id: result.insertId,
@@ -44,12 +46,15 @@ const create = async (blogData) => {
 }
 
 const update = async (blogData) => {
-  const sql = `update blog set title = '${CommonUtil.toLiteral(blogData.title)}', content = '${CommonUtil.toLiteral(blogData.content)}' where id = '${blogData.id}'`
+  const sql = `update blog set 
+  title = ${escape(xss(CommonUtil.toLiteral(blogData.title)))}, 
+  content = ${escape(xss(CommonUtil.toLiteral(blogData.content)))}
+  where id = ${escape(blogData.id)}`
   return exec(sql)
 }
 
 const deleteById = async (id) => {
-  const sql = `delete from blog where id = ${id}`
+  const sql = `delete from blog where id = ${escape(id)}`
   return exec(sql)
 }
 
