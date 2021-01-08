@@ -6,6 +6,7 @@
 
 const BusinessError = require('../model/business-error')
 const UserDao = require('../dao/user-dao')
+const {passwordMatch} = require('../util/encrypt-util')
 /**
  * 用户登录
  * @param username 用户名
@@ -16,7 +17,7 @@ const login = async (username, password) => {
    if(!user) {
      throw new BusinessError('用户名或密码错误')
    }
-   if(user.password !== password) {
+   if(!passwordMatch(password, user.password)) {
      throw new BusinessError('用户名或密码错误')
    }
    return user;
