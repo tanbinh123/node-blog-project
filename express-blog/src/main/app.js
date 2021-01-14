@@ -6,16 +6,15 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session')
 const RedisStore = require('connect-redis')(session)
-const { redisClient } = require('./src/main/db/redis')
-const ResponseModel = require("./src/main/model/response-model");
+const { redisClient } = require('./db/redis')
+const ResponseModel = require("./model/response-model");
+const {LOG_CONFIG} = require('./config/log')
 // 引入路由
-const blogRouter = require('./src/main/routes/blog');
-const userRouter = require('./src/main/routes/user');
-
+const blogRouter = require('./routes/blog');
+const userRouter = require('./routes/user');
 
 const app = express();
-
-app.use(logger('dev'));
+app.use(logger(LOG_CONFIG.format, LOG_CONFIG.options));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -28,20 +27,15 @@ app.use(session({
     maxAge: 60 * 60 * 24 * 1000 // 一天
   }
 }))
-// 使用路由
-app.use('/favicon.ico', () => {
-  console.log('获取头像')
-})
 app.use('/api/blog', blogRouter);
 app.use('/api/user', userRouter);
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   let message = err.message
   let code = err.status
