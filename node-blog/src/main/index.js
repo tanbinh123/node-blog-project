@@ -3,10 +3,6 @@ const serverHandler = require('./handler/server-handler')
 const exceptionHandler = require('./handler/exception-handler')
 const PORT = 8000
 
-// 统一异常处理
-process.on('uncaughtException', e => {
-
-});
 const server = http.createServer(async (req, res) => {
   try {
     await serverHandler(req, res)

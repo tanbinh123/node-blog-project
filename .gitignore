@@ -9,3 +9,8 @@ node-blog/.idea/*
 node-blog/node_modules/*
 node-blog/package-lock.json
 node-blog/logs/*
+
+express-blog/.idea/*
+express-blog/node_modules/*
+express-blog/package-lock.json
+express-blog/logs/*
