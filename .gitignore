@@ -14,3 +14,7 @@ express-blog/.idea/*
 express-blog/node_modules/*
 express-blog/package-lock.json
 express-blog/logs/*
+
+lib/express/.idea/*
+lib/express/node_modules/*
+lib/express/package-lock.json

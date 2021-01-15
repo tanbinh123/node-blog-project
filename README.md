@@ -15,3 +15,5 @@ express-blog为服务端, 进入express-blog目录，执行以下命令
 启动方式
 `npm run dev`
 
+
+lib/express 为手写express框架实现， 主要采用，发布订阅模式，收集中间件，当访问时，从收集的中间件中取出，并访问
