@@ -18,7 +18,7 @@ if(env === 'dev') {
   }
 }else if (env === 'prd') {
   const accessLogStream = rfs.createStream('access.log', {
-    interval: '1m', // rotate daily
+    interval: '1d', // rotate daily
     path: path.join(__dirname, '../../../', 'logs')
   })
   LOG_CONFIG = {

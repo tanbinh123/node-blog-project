@@ -9,6 +9,8 @@ const session = require('koa-generic-session');
 const redisStore = require('koa-redis');
 const { REDIS_CONFIG } = require('./config/db')
 const ResponseModel = require('./model/response-model')
+const morgan = require('koa-morgan')
+const {LOG_CONFIG} = require('./config/log')
 // error handler
 onerror(app)
 
@@ -24,7 +26,7 @@ app.use((async (ctx, next) => {
     ctx.body = ResponseModel.ofStatus(null, err.message, err.code || 500)
   }
 }))
-
+app.use(morgan(LOG_CONFIG.format, LOG_CONFIG.options))
 // middlewares
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
@@ -48,7 +50,6 @@ app.use(session({
 app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
-
 // logger
 app.use(async (ctx, next) => {
   const start = new Date()
