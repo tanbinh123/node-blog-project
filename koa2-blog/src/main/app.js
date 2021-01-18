@@ -26,6 +26,7 @@ app.use((async (ctx, next) => {
     ctx.body = ResponseModel.ofStatus(null, err.message, err.code || 500)
   }
 }))
+// 自定义日志
 app.use(morgan(LOG_CONFIG.format, LOG_CONFIG.options))
 // middlewares
 app.use(bodyparser({
