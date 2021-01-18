@@ -18,3 +18,8 @@ express-blog/logs/*
 lib/express/.idea/*
 lib/express/node_modules/*
 lib/express/package-lock.json
+
+koa2-blog/.idea/*
+koa2-blog/node_modules/*
+koa2-blog/package-lock.json
+koa2-blog/logs/*
